@@ -1,7 +1,7 @@
 # Movies-Library - 1.0
 **Abdulrahman mansour**
 
-**please note that you should add the movie name in the search route /search in *parameter : query* *value : movie name to search**
+**please note that you should add the movie name in the search route /search in *parameter : query* --- *value : movie name to search**
 
 ## WRRC
 ![image](./Movie%20Data/API.png)
