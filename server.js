@@ -1,45 +1,86 @@
 'use strict'
 
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require('express');
+const app = express();
+const port = 3000;
+require("dotenv").config();
 const axios = require("axios").default;
+const moviesData = require("./Movie Data/data.json");
 
-const moviesData = require("./Movie Data/data.json")
-
+//Routes
 app.get("/",homePage);
-
 app.get("/favorite",favoritePage);
-
 app.get("/trending",trendingHandler);
-
 app.get("/search", searchMovieHandler);
+app.get("/discover",discoverHandler);
+app.get("/genres",genresHandler);
 
-function searchMovieHandler(req , res){
-   // console.log(req.query);
-    //res.send("searching")
 
-    let movieName = req.query.name;
-    let url = "https://api.themoviedb.org/3/search/movie?api_key=668baa4bb128a32b82fe0c15b21dd699&language=en-US&query=The&page=2"
+//API KEY
+let apiKey = process.env.API_KEY;
+
+
+//genres route function
+function genresHandler(req , res) {
+    let url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`
     axios.get(url)
     .then(result => {
-        console.log(page.results)
+        console.log(result.data)
+        res.json(result.data)
     })
-    .catch()
+    .catch(error => {
+        console.log(error);
+        res.send("error in getting data from the API")
+    })
 }
 
+
+//discover route function
+function discoverHandler(req , res) {
+    let url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`
+    axios.get(url)
+    .then(result => {
+        console.log(result.data.results)
+        res.json(result.data.results)
+    })
+    .catch(error => {
+        console.log(error);
+        res.send("error in getting data from the API")
+    })
+}
+
+//Search route function
+function searchMovieHandler(req , res){
+    //console.log(req.query);
+    //res.send("searching")
+
+    let movieName = req.query.query;
+    let url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${movieName}&page=1&include_adult=false`
+    axios.get(url)
+    .then(result => {
+        console.log(result.data.results)
+        res.json(result.data.results)
+    })
+    .catch(error => {
+        console.log(error);
+        res.send("error in getting data from the API")
+    });
+}
+
+//favourite route function
 function favoritePage(req , res) {
     res.send("Welcome to Favorite Page");
 }
 
+//trending route function
 function trendingHandler(req,res){
-    let url = "https://api.themoviedb.org/3/trending/all/week?api_key=37ddc7081e348bf246a42f3be2b3dfd0&language=en-US"
+    let url = `https://api.themoviedb.org/3/trending/all/day?api_key=${apiKey}`
     axios.get(url)
     .then(result => {
-        console.log(result.data)
-        res.send("api gave me data")
+       // console.log(result.data)
+       // res.send("api gave me data")
 
-       let movies = result.page.results.map((movie) => {
+       let movies = result.data.results.map((movie) => {
            return new Movie(
                movie.id,
                movie.title,
@@ -47,17 +88,18 @@ function trendingHandler(req,res){
                movie.poster_path,
                movie.overview
             );
-       })
-       res.json(movies);  
+       });
+       res.json(movies);
     }
-        
     )
+
     .catch(error => {
         console.log(error);
         res.send("error in getting data from the API")
     })
 }
 
+//Home page route function
 function homePage(req , res){
     let movieInfo = [];
 
@@ -84,6 +126,7 @@ function Movie(id , title , release_date , poster_path , overview){
     this.overview = overview
 }
 
+//Error 500 handler
 app.use((err, req, res, next) => {
     console.error(err.stack)
     res.status(500).send({
@@ -92,6 +135,7 @@ app.use((err, req, res, next) => {
         })
   })
 
+//Error 404 handler
 app.use((req, res, next) => {
     res.status(404).send("page not found")
   })
