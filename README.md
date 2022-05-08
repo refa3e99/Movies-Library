@@ -1,6 +1,7 @@
 # Movies-Library - 1.0
-
 **Abdulrahman mansour**
+
+**please note that you should add the movie name in the search route /search in *parameter : query* & *value : movie name to search**
 
 ## WRRC
 ![image](./Movie%20Data/movies%20library.png)
@@ -22,4 +23,4 @@
 - handle error 500
 
 **no questions**
-**1:30 - 2 hours and it took me 2 hours to complete**
+**3-4 hours and it took me 4 hours to complete**
