@@ -4,7 +4,7 @@
 **please note that you should add the movie name in the search route /search in *parameter : query* & *value : movie name to search**
 
 ## WRRC
-![image](./Movie%20Data/API.png)
+![image](./Movie%20Data/movies%20library.png)
 
 ## Overview
 **movie library for trending movies**

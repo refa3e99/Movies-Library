@@ -3,9 +3,22 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const cors = require('cors');
 require("dotenv").config();
 const axios = require("axios").default;
 const moviesData = require("./Movie Data/data.json");
+const bodyParser = require('body-parser');
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+let url = "postgress://student:1234@localhost:5432/demo0";
+const { Client } = require('pg');
+const client = new Client(url);
+
+
+//API KEY
+let apiKey = process.env.API_KEY;
 
 //Routes
 app.get("/",homePage);
@@ -14,10 +27,33 @@ app.get("/trending",trendingHandler);
 app.get("/search", searchMovieHandler);
 app.get("/discover",discoverHandler);
 app.get("/genres",genresHandler);
+//-----------
+app.post('/addMovie',postHandler);
+app.get('/getMovies',getHandler)
 
 
-//API KEY
-let apiKey = process.env.API_KEY;
+
+function postHandler(req , res){
+    console.log(req.body);
+
+    let {title,category,overview,age} = req.body;
+
+
+    let sql = `INSERT INTO movies (title, category, overview, age) VALUES ($1,$2,$3,$4);`;
+    let values = [title, category, overview, age]
+    client.query(sql,values).then(result => {
+        console.log(result)
+        return res.status(201).json(result.rows);
+    })
+}
+
+function getHandler(req , res){
+    let sql = `SELECT * FROM movies ;` ;
+    client.query(sql).then((result)=>{
+        console.log(result);
+        res.json(result.rows);
+    }).catch()
+}
 
 
 //genres route function
@@ -140,9 +176,13 @@ app.use((req, res, next) => {
     res.status(404).send("page not found")
   })
 
+client.connect().then( () => {
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+    app.listen(port, () => {
+        console.log(`Example app listening on port ${port}`)
+      })
+
 })
+
 
 
