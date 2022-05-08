@@ -3,7 +3,7 @@
 **Abdulrahman mansour**
 
 ## WRRC
-![image](./Movie%20Data/API.png)
+![image](./Movie%20Data/movies%20library.png)
 
 ## Overview
 **movie library for trending movies**
@@ -22,4 +22,4 @@
 - handle error 500
 
 **no questions**
-**3-4 hours and it took me 4 hours to complete**
+**1:30 - 2 hours and it took me 2 hours to complete**
