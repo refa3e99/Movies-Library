@@ -3,24 +3,9 @@
 
 **please note that you should add the movie name in the search route /search in *parameter : query* & *value : movie name to search**
 
-## WRRC
+## WRRC Database added
 ![image](./Movie%20Data/movies%20library.png)
 
-## Overview
-**movie library for trending movies**
-**movies library**
-## Getting Started
-- install node.js
-- npm init -y
-- install thunder client extintion
-- write js handle functions 
-- run the port
-
-## Project Features
-- home page to display movie info 
-- favorite page 
-- handle error 404
-- handle error 500
-
 **no questions**
-**3-4 hours and it took me 4 hours to complete**
+
+**i thought it would take 2 hours and it took me 2 hours to finish**
