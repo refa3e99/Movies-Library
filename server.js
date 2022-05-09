@@ -28,8 +28,53 @@ app.get("/search", searchMovieHandler);
 app.get("/discover",discoverHandler);
 app.get("/genres",genresHandler);
 //-----------
+//CRUD
 app.post('/addMovie',postHandler);
-app.get('/getMovies',getHandler)
+app.get('/getMovies',getHandler);
+app.put('/updateMovie/:MovieId', handleUpdateMovie);
+app.delete('/deleteMovie/:MovieId',handleDeleteMovie);
+app.get('/getMovies/:MovieId',handleGetMovie);
+
+
+
+
+
+function handleGetMovie(req,res) {
+    let id = req.params.MovieId;
+    let sql = `SELECT * FROM movies WHERE id =${id}`;
+    client.query(sql).then(result => {
+        console.log(result.rows[0]);
+        res.json(result.rows[0]);
+    })
+    .catch()
+}
+  
+
+function handleDeleteMovie(req,res) {
+    let id = req.params.MovieId;
+    let sql = `DELETE FROM movies WHERE id =${id} RETURNING *`;
+    client.query(sql).then(result => {
+        console.log(result.rows[0]);
+        res.status(204).json([]);
+    })
+    .catch(err => {
+        console.log(err);
+    })
+}
+
+
+
+function handleUpdateMovie(req,res){
+    let id = req.params.MovieId;
+    let {title,category,overview,age} = req.body;
+    let sql = `UPDATE movies SET title =$1 , category =$2 , overview =$3 , age =$4 WHERE id = ${id} RETURNING *`;
+    let values = [title,category,overview,age];
+    client.query(sql, values).then(result => {
+        console.log(result.rows[0]);
+        res.send(result.rows[0]);
+    })
+    .catch()
+}
 
 
 
@@ -39,12 +84,13 @@ function postHandler(req , res){
     let {title,category,overview,age} = req.body;
 
 
-    let sql = `INSERT INTO movies (title, category, overview, age) VALUES ($1,$2,$3,$4);`;
+    let sql = `INSERT INTO movies (title, category, overview, age) VALUES ($1,$2,$3,$4) RETURNING *`;
     let values = [title, category, overview, age]
     client.query(sql,values).then(result => {
-        console.log(result)
+        console.log(result.rows[0]);
         return res.status(201).json(result.rows);
     })
+    .catch()
 }
 
 function getHandler(req , res){
