@@ -12,7 +12,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-let url = "postgress://student:1234@localhost:5432/demo0";
+let url = process.env.DATABASE_URL;
 const { Client } = require('pg');
 const client = new Client(url);
 

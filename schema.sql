@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS movies;
+
 CREATE TABLE movies (
     title varchar(255),
     category varchar(255),
