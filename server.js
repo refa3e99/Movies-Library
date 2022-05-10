@@ -66,9 +66,9 @@ function handleDeleteMovie(req,res) {
 
 function handleUpdateMovie(req,res){
     let id = req.params.MovieId;
-    let {title,category,overview,age} = req.body;
-    let sql = `UPDATE movies SET title =$1 , category =$2 , overview =$3 , age =$4 WHERE id = ${id} RETURNING *`;
-    let values = [title,category,overview,age];
+    let {title,category,overview,age,comment} = req.body;
+    let sql = `UPDATE movies SET title =$1 , category =$2 , overview =$3 , age =$4 , comment =$5  WHERE id = ${id} RETURNING *`;
+    let values = [title,category,overview,age,comment];
     client.query(sql, values).then(result => {
         console.log(result.rows[0]);
         res.send(result.rows[0]);
@@ -81,11 +81,11 @@ function handleUpdateMovie(req,res){
 function postHandler(req , res){
     console.log(req.body);
 
-    let {title,category,overview,age} = req.body;
+    let {title,category,overview,age,comment} = req.body;
 
 
-    let sql = `INSERT INTO movies (title, category, overview, age) VALUES ($1,$2,$3,$4) RETURNING *`;
-    let values = [title, category, overview, age]
+    let sql = `INSERT INTO movies (title, category, overview, age, comment) VALUES ($1,$2,$3,$4,$5) RETURNING *`;
+    let values = [title, category, overview, age ,comment];
     client.query(sql,values).then(result => {
         console.log(result.rows[0]);
         return res.status(201).json(result.rows);
