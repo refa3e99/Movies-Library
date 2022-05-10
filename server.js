@@ -2,7 +2,7 @@
 
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3001;
 const cors = require('cors');
 require("dotenv").config();
 const axios = require("axios").default;
@@ -14,8 +14,15 @@ app.use(bodyParser.json());
 
 let url = process.env.DATABASE_URL;
 const { Client } = require('pg');
-const client = new Client(url);
 
+
+//const client = new Client(url);
+const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
+})
 
 //API KEY
 let apiKey = process.env.API_KEY;
