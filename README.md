@@ -48,6 +48,6 @@
 - get specifec movie from database
 
 
-**no questions**
+**no questions, & i think i have to practice this more to understand it**
 
-**i thought it would take 2 hours and it took me 2 hours to finish**
+**i thought it would take about 1 hour and it took about an hour and a half**
